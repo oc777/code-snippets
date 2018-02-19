@@ -1,9 +1,14 @@
+<<<<<<< HEAD
 version: '2'
+=======
+version: "2"
+>>>>>>> fb0c383c471165900205138fca45eb0ca56a750d
 
 services:
   web:
     build: .
     ports:
+<<<<<<< HEAD
       - 3000:3000
     links:
       - mongo
@@ -13,4 +18,13 @@ services:
     image: mongo
     ports:
       - 27017:27017
+=======
+    — "8000:8000"
+    links:
+      — mongo
+  mongo:
+    image: mongo
+    ports:
+      — "27017:27017"
+>>>>>>> fb0c383c471165900205138fca45eb0ca56a750d
       

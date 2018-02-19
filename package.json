@@ -4,8 +4,11 @@
   "description": "1DV023 exam 2",
   "main": "app.js",
   "scripts": {
+<<<<<<< HEAD
     "start": "node app.js",
     "devstart": "nodemon --watch . -x \"npm start\"",
+=======
+>>>>>>> fb0c383c471165900205138fca45eb0ca56a750d
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -30,6 +33,11 @@
     "mongoose": "^5.0.6"
   },
   "devDependencies": {
+<<<<<<< HEAD
     "standard": "*"
+=======
+    "nodemon": "^1.15.0",
+    "standard": "^10.0.3"
+>>>>>>> fb0c383c471165900205138fca45eb0ca56a750d
   }
 }
