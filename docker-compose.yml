@@ -5,7 +5,8 @@ services:
     build: .
     ports:
       - 3000:3000
-    links:
+      - 3838:3838
+    depends_on:
       - mongo
     volumes:
       - .:/app
@@ -14,3 +15,8 @@ services:
     image: mongo
     ports:
       - 27017:27017
+    volumes:
+      - dbdata:/data/db
+
+volumes:
+  dbdata:
