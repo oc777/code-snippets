@@ -44,7 +44,7 @@ app.use(express.static(path.join(__dirname, 'public')))
 app.use(bodyParser.urlencoded({ extended: true }))
 
 // set up mongoose
-mongoose.connect('mongodb://mongo/test', { useMongoClient: true })
+mongoose.connect('mongodb://mongo/test')
   .then(() => {
     console.log('Database connected')
   })
@@ -52,8 +52,15 @@ mongoose.connect('mongodb://mongo/test', { useMongoClient: true })
     console.log('Error connecting to database: ' + error)
   })
 
+// Setup flash messages.
+app.use((req, res, next) => {
+  res.locals.flash = req.session.flash
+  delete req.session.flash
+  next()
+})
 // routes
 app.use('/', require('./routes/homeRouter'))
+app.use('/snippets', require('./routes/snippetRouter'))
 
 // app.get('/hello', (req, res) => {
 //   res.send('hello')
