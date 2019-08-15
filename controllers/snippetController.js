@@ -7,7 +7,17 @@ const snippetController = {}
 // index GET
 snippetController.index = async (req, res, next) => {
   try {
-    res.render('snippets/index')
+    const locals = {
+        snippetItems: (await SnippetItem.find({}))
+          .map(snippetItem => ({
+            id: snippetItem._id,
+            date: snippetItem.date,
+            title: snippetItem.title,
+            code: snippetItem.code,
+            author: snippetItem.author
+          }))
+      }
+    res.render('snippets/index', { locals })
   } catch (error) {
     next(error)
   }
