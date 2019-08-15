@@ -40,14 +40,12 @@ snippetController.createSnippet = async (req, res, next) => {
 
     await snippet.save()
 
-    console.log(req.body)
     req.session.flash = { type: 'success', text: 'Snippet was submited successfully.' }
     res.redirect('.')
   } catch (error) {
     console.log(req.body)
     req.session.flash = { type: 'error', text: error.message }
     res.render('snippets/create')
-    console.log(error)
   }
 }
 

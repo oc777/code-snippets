@@ -36,3 +36,6 @@ form button {
 textarea {
     resize: vertical;
 }
+.snippet-item {
+    margin: 20px 0;
+}
