@@ -1,19 +1,37 @@
 <div class="header">
-    <ul class="nav">
-        <li>
-            <a href="/">home</a>
-        </li>
-        <li>
-            <a href="/snippets/">all snippets</a>
-        </li>
-        <li>
-            <a href="/snippets/create">new snippet</a>
-        </li>
-        <li>
-            <a href="/user/login">login</a>
-        </li>
-        <li>
-            <a href="/user/register">register</a>
-        </li>
-    </ul>
+    {{#if user}}
+        <ul class="nav">
+            <li>
+                <a href="/">home</a>
+            </li>
+            <li>
+                <a href="/snippets/">all snippets</a>
+            </li>
+            <li>
+                <a href="/snippets/create">new snippet</a>
+            </li>
+            <li>
+                <a href="/user/logout">logout</a>
+            </li>
+        </ul>
+    {{else}}
+        <ul class="nav">
+            <li>
+                <a href="/">home</a>
+            </li>
+            <li>
+                <a href="/snippets/">all snippets</a>
+            </li>
+            <li>
+                <a href="/snippets/create">new snippet</a>
+            </li>
+            <li>
+                <a href="/user/login">login</a>
+            </li>
+            <li>
+                <a href="/user/register">register</a>
+            </li>
+        </ul>
+    
+    {{/if}}
 </div>

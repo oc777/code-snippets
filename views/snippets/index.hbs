@@ -20,13 +20,15 @@
                     <p class="code">{{this.code}}</p>
                     <p class="author">Author: {{this.author}}</p>
                 </div>
-                <div>
-                    <a class="btn" href="/snippets/edit/{{this.id}}">edit</span></a>
-                    <a class="btn" href="/snippets/delete/{{this.id}}">delete</span></a>
-                </div>
+                {{#if user}}
+                    <div>
+                        <a class="btn" href="/snippets/edit/{{this.id}}">edit</span></a>
+                        <a class="btn" href="/snippets/delete/{{this.id}}">delete</span></a>
+                    </div>
+                {{/if}}
             </div>
         {{/each}}
     {{else}}
-        <p>no snippets yet...</p>>
+        <p>no snippets yet...</p>
     {{/if}}
 </div>

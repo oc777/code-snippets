@@ -12,7 +12,7 @@ const port = process.env.PORT || 3000
 
 // setup session
 const sessionOptions = {
-  name: 'authenticated',
+  name: 'snippetsapp',
   secret: 'humptydumpty',
   resave: false,
   saveUninitialized: false, // false is useful for implementing login sessions, reducing server storage usage, or complying with laws that require permission before setting a cookie
@@ -56,14 +56,19 @@ app.use((req, res, next) => {
   delete req.session.flash
   next()
 })
+
+// checks if user is authenticated
+app.use((req, res, next) => {
+  if (req.session && req.session.user) {
+    res.locals.user = req.session.user
+  }
+  next()
+})
+
 // routes
 app.use('/', require('./routes/homeRouter'))
 app.use('/snippets', require('./routes/snippetRouter'))
 app.use('/user', require('./routes/userRouter'))
-
-// app.get('/hello', (req, res) => {
-//   res.send('hello')
-// })
 
 // 404 handling
 app.use((req, res, next) => {

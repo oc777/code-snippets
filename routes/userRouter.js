@@ -11,10 +11,11 @@ router.route('/register')
 
 // login user
 router.route('/login')
-//   .get(controller.login)
-//   .post(controller.loginUser)
+  .get(controller.login)
+  .post(controller.loginUser)
 
 // logout user
-
+router.route('/logout')
+  .get(controller.logout)
 
 module.exports = router
