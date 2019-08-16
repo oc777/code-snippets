@@ -1,0 +1,10 @@
+<h1>register</h1>
+
+<form method="post" action="/user/register" class="snippet">
+    <label for="email">Email/Username:</label>
+    <input type="email" name="email" placeholder="you@email.com" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" required></input>
+    <label for="password">password:</label>
+    <input name="password" placeholder="min 8 characters" minlength="8" required></input>
+    <button type="submit">Submit</button>
+</form>
+<a class="btn" href="/">CANCEL</a>

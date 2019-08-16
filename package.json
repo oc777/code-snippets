@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/1dv023/oc222ba-examination-2#readme",
   "dependencies": {
+    "bcrypt": "^3.0.6",
     "body-parser": "^1.18.2",
     "express": "^4.16.2",
     "express-handlebars": "^3.0.0",

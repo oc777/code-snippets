@@ -34,7 +34,7 @@ form button {
     width: 200px;
     margin: 30px auto;
 }
-label {
+form label {
     text-transform: capitalize;
     font-weight: bold;
     padding-top: 10px;

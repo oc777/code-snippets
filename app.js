@@ -59,6 +59,7 @@ app.use((req, res, next) => {
 // routes
 app.use('/', require('./routes/homeRouter'))
 app.use('/snippets', require('./routes/snippetRouter'))
+app.use('/user', require('./routes/userRouter'))
 
 // app.get('/hello', (req, res) => {
 //   res.send('hello')
