@@ -8,15 +8,16 @@ const snippetController = {}
 snippetController.index = async (req, res, next) => {
   try {
     const locals = {
-        snippetItems: (await SnippetItem.find({}))
-          .map(snippetItem => ({
-            id: snippetItem._id,
-            date: snippetItem.date,
-            title: snippetItem.title,
-            code: snippetItem.code,
-            author: snippetItem.author
-          }))
-      }
+      snippetItems: (await SnippetItem.find({}))
+        .map(snippetItem => ({
+          id: snippetItem._id,
+          dateCreated: moment(snippetItem.dateCreated).format('YY MM DD HH:mm'),
+          dateUpdated: (moment(snippetItem.dateUpdated).isValid()) ? moment(snippetItem.dateUpdated).format('YY MM DD HH:mm') : 'na',
+          title: snippetItem.title,
+          code: snippetItem.code,
+          author: snippetItem.author
+        }))
+    }
     res.render('snippets/index', { locals })
   } catch (error) {
     next(error)
@@ -32,7 +33,7 @@ snippetController.create = async (req, res, next) => {
 snippetController.createSnippet = async (req, res, next) => {
   try {
     const snippet = new SnippetItem({
-      date: moment(),
+      // date: new Date(),
       title: req.body.title,
       code: req.body.code,
       author: 'author'
@@ -43,9 +44,50 @@ snippetController.createSnippet = async (req, res, next) => {
     req.session.flash = { type: 'success', text: 'Snippet was submited successfully.' }
     res.redirect('.')
   } catch (error) {
-    console.log(req.body)
     req.session.flash = { type: 'error', text: error.message }
     res.render('snippets/create')
+  }
+}
+
+// edit GET
+snippetController.edit = async (req, res, next) => {
+  try {
+    const snippetItem = await SnippetItem.findOne({ _id: req.params.id })
+    const locals = {
+      id: snippetItem._id,
+      dateUpdated: snippetItem.dateUpdated,
+      dateCreated: snippetItem.dateCreated,
+      title: snippetItem.title,
+      code: snippetItem.code,
+      author: snippetItem.author
+    }
+
+    res.render('snippets/edit', { locals })
+  } catch (error) {
+    req.session.flash = { type: 'error', text: error }
+    req.redirect('.')
+  }
+}
+
+// edit POST
+snippetController.editSnippet = async (req, res, next) => {
+  try {
+    const snippet = await SnippetItem.updateOne({ _id: req.params.id }, { $set: {
+      title: req.body.title,
+      code: req.body.code,
+      dateUpdated: moment(new Date())
+    } })
+
+    if (snippet.nModified === 1) {
+      req.session.flash = { type: 'success', text: 'snippet updated successfully' }
+    } else {
+      req.session.flash = { type: 'error', text: 'could not update' }
+    }
+
+    res.redirect('..')
+  } catch (error) {
+    req.session.flash = { type: 'error', text: error }
+    req.redirect('.')
   }
 }
 

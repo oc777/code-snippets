@@ -1,0 +1,8 @@
+<h1>create snippet</h1>
+
+<form method="post" action="/snippets/edit/{{locals.id}}" class="snippet">
+    <input type="text" name="id" value="{{locals.id}}" readonly></input>
+    <input type="text" name="title" placeholder="Snippet title" value="{{locals.title}}"></input>
+    <textarea name="code" placeholder="Snippet code" rows="20">{{locals.code}}</textarea>
+    <button type="submit">Submit</button>
+</form>

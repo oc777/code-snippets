@@ -12,9 +12,10 @@ router.route('/create')
   .get(controller.create)
   .post(controller.createSnippet)
 
-// // edit snippet
-// router.get('/edit/:id', controller.edit)
-// router.post('/edit', controller.editSnippet)
+// edit snippet
+router.route('/edit/:id')
+  .get(controller.edit)
+  .post(controller.editSnippet)
 
 // // delete snippet
 // router.get('/delete/:id', controller.delete)

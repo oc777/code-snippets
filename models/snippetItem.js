@@ -4,10 +4,15 @@ const mongoose = require('mongoose')
 
 // Create a schema.
 const snippetItemSchema = new mongoose.Schema({
-  createdAt: {
+  dateCreated: {
     type: Date,
     required: true,
     default: Date.now
+  },
+  dateUpdated: {
+    type: Date,
+    required: false,
+    default: null
   },
   title: String,
   code: {

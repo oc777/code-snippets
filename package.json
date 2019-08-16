@@ -32,5 +32,8 @@
   },
   "devDependencies": {
     "standard": "*"
+  },
+  "nodemonConfig": {
+    "ext": "js,json,hbs,html,css"
   }
 }
