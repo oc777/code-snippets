@@ -15,14 +15,14 @@
                     <span class="date">date modified: {{this.dateUpdated}}</span>
                 </div>
                 <div>
-                    <span class="id">{{this.id}}</span>
-                    <span class="title">{{this.title}}</span>
-                    <span class="code">{{this.code}}</span>
-                    <span class="author">{{this.author}}</span>
+                    <p class="id">ID: {{this.id}}</p>
+                    <p class="title">Title: {{this.title}}</p>
+                    <p class="code">{{this.code}}</p>
+                    <p class="author">Author: {{this.author}}</p>
                 </div>
                 <div>
-                    <a href="/snippets/edit/{{this.id}}">edit</span></a>
-                    <a href="/snippets/delete/{{this.id}}">delete</span></a>
+                    <a class="btn" href="/snippets/edit/{{this.id}}">edit</span></a>
+                    <a class="btn" href="/snippets/delete/{{this.id}}">delete</span></a>
                 </div>
             </div>
         {{/each}}

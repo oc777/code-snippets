@@ -25,8 +25,6 @@ const sessionOptions = {
 
 app.use(session(sessionOptions))
 
-console.log('Hello world. This is me')
-
 // Configure rendering engine, with change extension to .hbs
 app.engine('hbs', exphbs({
   extname: '.hbs',
