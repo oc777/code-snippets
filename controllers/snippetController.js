@@ -45,7 +45,7 @@ snippetController.createSnippet = async (req, res, next) => {
     res.redirect('.')
   } catch (error) {
     req.session.flash = { type: 'error', text: error.message }
-    res.render('snippets/create')
+    res.render('..')
   }
 }
 
@@ -65,7 +65,7 @@ snippetController.edit = async (req, res, next) => {
     res.render('snippets/edit', { locals })
   } catch (error) {
     req.session.flash = { type: 'error', text: error }
-    req.redirect('.')
+    res.redirect('..')
   }
 }
 
@@ -87,7 +87,37 @@ snippetController.editSnippet = async (req, res, next) => {
     res.redirect('..')
   } catch (error) {
     req.session.flash = { type: 'error', text: error }
-    req.redirect('.')
+    res.redirect('.')
+  }
+}
+
+// delete GET
+snippetController.delete = async (req, res, next) => {
+  try {
+    const snippetItem = await SnippetItem.findOne({ _id: req.params.id })
+    const locals = {
+      id: snippetItem._id,
+      title: snippetItem.title,
+      code: snippetItem.code,
+      author: snippetItem.author
+    }
+
+    res.render('snippets/delete', { locals })
+  } catch (error) {
+    req.session.flash = { type: 'error', text: error }
+    res.redirect('..')
+  }
+}
+
+// delete POST
+snippetController.deleteSnippet = async (req, res, next) => {
+  try {
+    await SnippetItem.deleteOne({ _id: req.params.id })
+    req.session.flash = { type: 'success', text: 'snippet deleted successfully' }
+    res.redirect('..')
+  } catch (error) {
+    req.session.flash = { type: 'error', text: JSON.stringify(error) }
+    res.redirect('..')
   }
 }
 

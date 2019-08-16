@@ -1,0 +1,10 @@
+<h1>create snippet</h1>
+
+<form method="post" action="/snippets/delete/{{locals.id}}" class="snippet">
+    <input type="text" name="id" value="{{locals.id}}" readonly></input>
+    <input type="text" name="title" placeholder="Snippet title" value="{{locals.title}}" readonly></input>
+    <textarea name="code" placeholder="Snippet code" rows="20" value="{{locals.code}}" readonly>{{locals.code}}</textarea>
+    <button type="submit">Delete</button>
+</form>
+
+<a href="/snippets/">CANCEL</a>

@@ -17,8 +17,9 @@ router.route('/edit/:id')
   .get(controller.edit)
   .post(controller.editSnippet)
 
-// // delete snippet
-// router.get('/delete/:id', controller.delete)
-// router.post('/delete', controller.deleteSnippet)
+// delete snippet
+router.route('/delete/:id')
+  .get(controller.delete)
+  .post(controller.deleteSnippet)
 
 module.exports = router
