@@ -18,7 +18,7 @@ userController.registerUser = async (req, res, next) => {
     await user.save()
 
     req.session.flash = { type: 'success', text: 'Registration successful.' }
-    res.redirect('../snippets/')
+    res.redirect('../user/login')
   } catch (error) {
     console.log(error)
     req.session.flash = { type: 'error', text: 'Registration failed' }
@@ -63,7 +63,24 @@ userController.logout = async (req, res, next) => {
       res.redirect('..')
     }
   } catch (error) {
+    next(error)
+  }
+}
 
+// check if user is authenticated
+userController.authenticate = async (req, res, next) => {
+  try {
+    if (req.session.user) {
+      // authenticated
+      next()
+    } else {
+      // not authenticated
+      const err = new Error()
+      err.statusCode = 401
+      next(err)
+    }
+  } catch (error) {
+    next(error)
   }
 }
 

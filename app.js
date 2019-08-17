@@ -57,7 +57,7 @@ app.use((req, res, next) => {
   next()
 })
 
-// checks if user is authenticated
+// Preserve authentication cookie between requests
 app.use((req, res, next) => {
   if (req.session && req.session.user) {
     res.locals.user = req.session.user
@@ -70,15 +70,27 @@ app.use('/', require('./routes/homeRouter'))
 app.use('/snippets', require('./routes/snippetRouter'))
 app.use('/user', require('./routes/userRouter'))
 
+// 401 handling
+app.use((req, res, next) => {
+  res.status(401)
+  res.render('errors/401')
+})
+
 // 404 handling
 app.use((req, res, next) => {
   res.status(404)
   res.render('errors/404')
 })
 
+// custom error handling
+app.use((err, req, res, next) => {
+  res.status(err.statusCode || 500)
+  res.redirect('../errors/' + err.statusCode)
+})
+
 // error handling
 app.use((err, req, res, next) => {
-  res.status(err.status || 500)
+  res.status(res.status || 500)
   res.send(err.message || 'server error')
 })
 
