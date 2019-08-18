@@ -6,6 +6,7 @@ const exphbs = require('express-handlebars')
 const session = require('express-session')
 const mongoose = require('mongoose')
 const path = require('path')
+const helmet = require('helmet')
 
 const app = express()
 const port = process.env.PORT || 3000
@@ -19,11 +20,22 @@ const sessionOptions = {
   cookie: {
     httpOnly: true,
     // secure: true, // for HTTPS connection
-    maxAge: 1000 * 60 * 10 // 10 minutes
+    maxAge: 1000 * 60 * 60, // 60 minutes
+    sameSite: 'lax'
   }
 }
 
 app.use(session(sessionOptions))
+
+// use Helmet HTTP headers with default modules enabled
+app.use(helmet())
+
+// and Helmet with CSP enabled
+app.use(helmet.contentSecurityPolicy({
+  directives: {
+    defaultSrc: ["'self'"]
+  }
+}))
 
 // Configure rendering engine, with change extension to .hbs
 app.engine('hbs', exphbs({

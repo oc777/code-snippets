@@ -125,7 +125,7 @@ snippetController.delete = async (req, res, next) => {
 // delete POST
 snippetController.deleteSnippet = async (req, res, next) => {
   try {
-    if (isAuthorized(snippetItem.author, req.session.user)) {
+    if (isAuthorized(req.body.author, req.session.user)) {
       await SnippetItem.deleteOne({ _id: req.params.id })
       req.session.flash = { type: 'success', text: 'snippet deleted successfully' }
       res.redirect('..')
@@ -139,7 +139,7 @@ snippetController.deleteSnippet = async (req, res, next) => {
 }
 
 const isAuthorized = (snippetAuthor, sessionUser) => {
-  return snippetAuthor.localeCompare(sessionUser) == 0
+  return snippetAuthor.localeCompare(sessionUser) === 0
 }
 
 const errorResponse = (errCode) => {
