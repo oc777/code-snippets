@@ -70,28 +70,37 @@ app.use('/', require('./routes/homeRouter'))
 app.use('/snippets', require('./routes/snippetRouter'))
 app.use('/user', require('./routes/userRouter'))
 
-// 401 handling
-app.use((req, res, next) => {
-  res.status(401)
-  res.render('errors/401')
-})
-
-// 404 handling
+// catch 404
 app.use((req, res, next) => {
   res.status(404)
-  res.render('errors/404')
+  res.render(path.join(__dirname, 'views', 'errors/404.hbs'))
 })
 
 // custom error handling
 app.use((err, req, res, next) => {
-  res.status(err.statusCode || 500)
-  res.redirect('../errors/' + err.statusCode)
-})
+  // 401 - lacks valid authentication
+  if (err.statusCode === 401) {
+    console.log('401 err')
+    return res.status(401).render(path.join(__dirname, 'views', 'errors/401.hbs'))
+  }
 
-// error handling
-app.use((err, req, res, next) => {
-  res.status(res.status || 500)
-  res.send(err.message || 'server error')
+  // 403 - not authorized
+  if (err.statusCode === 403) {
+    console.log('403 err')
+    return res.status(403).render(path.join(__dirname, 'views', 'errors/403.hbs'))
+  }
+
+  // 404 - not found
+  if (err.statusCode === 404) {
+    console.log('404 err')
+    console.log(err)
+    return res.status(404).render(path.join(__dirname, 'views', 'errors/404.hbs'))
+  }
+
+  // 500 - server error
+  console.log('server err')
+  res.status(err.status || 500).render(path.join(__dirname, 'views', 'errors/500.hbs'))
+  // res.send(err.message || 'server error')
 })
 
 // Start listening.

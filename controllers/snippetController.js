@@ -34,7 +34,6 @@ snippetController.createSnippet = async (req, res, next) => {
   try {
     const userId = req.session.user
     const snippet = new SnippetItem({
-      // date: new Date(),
       title: req.body.title,
       code: req.body.code,
       author: userId
@@ -53,16 +52,21 @@ snippetController.createSnippet = async (req, res, next) => {
 snippetController.edit = async (req, res, next) => {
   try {
     const snippetItem = await SnippetItem.findOne({ _id: req.params.id })
-    const locals = {
-      id: snippetItem._id,
-      dateUpdated: snippetItem.dateUpdated,
-      dateCreated: snippetItem.dateCreated,
-      title: snippetItem.title,
-      code: snippetItem.code,
-      author: snippetItem.author
-    }
+    if (isAuthorized(snippetItem.author, req.session.user)) {
+      const locals = {
+        id: snippetItem._id,
+        dateUpdated: snippetItem.dateUpdated,
+        dateCreated: snippetItem.dateCreated,
+        title: snippetItem.title,
+        code: snippetItem.code,
+        author: snippetItem.author
+      }
 
-    res.render('snippets/edit', { locals })
+      res.render('snippets/edit', { locals })
+    } else {
+      // not authorized
+      next(errorResponse(403))
+    }
   } catch (error) {
     req.session.flash = { type: 'error', text: 'could not open' }
     res.redirect('..')
@@ -72,19 +76,24 @@ snippetController.edit = async (req, res, next) => {
 // edit POST
 snippetController.editSnippet = async (req, res, next) => {
   try {
-    const snippet = await SnippetItem.updateOne({ _id: req.params.id }, { $set: {
-      title: req.body.title,
-      code: req.body.code,
-      dateUpdated: moment(new Date())
-    } })
+    // check if authorized?
+    if (isAuthorized(req.body.author, req.session.user)) {
+      const snippet = await SnippetItem.updateOne({ _id: req.params.id }, { $set: {
+        title: req.body.title,
+        code: req.body.code,
+        dateUpdated: moment(new Date())
+      } })
 
-    if (snippet.nModified === 1) {
-      req.session.flash = { type: 'success', text: 'snippet updated successfully' }
+      if (snippet.nModified === 1) {
+        req.session.flash = { type: 'success', text: 'snippet updated successfully' }
+      } else {
+        req.session.flash = { type: 'error', text: 'could not update' }
+      }
+
+      res.redirect('..')
     } else {
-      req.session.flash = { type: 'error', text: 'could not update' }
+      next(errorResponse(403))
     }
-
-    res.redirect('..')
   } catch (error) {
     req.session.flash = { type: 'error', text: 'could not update' }
     res.redirect('.')
@@ -95,14 +104,18 @@ snippetController.editSnippet = async (req, res, next) => {
 snippetController.delete = async (req, res, next) => {
   try {
     const snippetItem = await SnippetItem.findOne({ _id: req.params.id })
-    const locals = {
-      id: snippetItem._id,
-      title: snippetItem.title,
-      code: snippetItem.code,
-      author: snippetItem.author
-    }
+    if (isAuthorized(snippetItem.author, req.session.user)) {
+      const locals = {
+        id: snippetItem._id,
+        title: snippetItem.title,
+        code: snippetItem.code,
+        author: snippetItem.author
+      }
 
-    res.render('snippets/delete', { locals })
+      res.render('snippets/delete', { locals })
+    } else {
+      next(errorResponse(403))
+    }
   } catch (error) {
     req.session.flash = { type: 'error', text: 'could not open' }
     res.redirect('..')
@@ -112,13 +125,27 @@ snippetController.delete = async (req, res, next) => {
 // delete POST
 snippetController.deleteSnippet = async (req, res, next) => {
   try {
-    await SnippetItem.deleteOne({ _id: req.params.id })
-    req.session.flash = { type: 'success', text: 'snippet deleted successfully' }
-    res.redirect('..')
+    if (isAuthorized(snippetItem.author, req.session.user)) {
+      await SnippetItem.deleteOne({ _id: req.params.id })
+      req.session.flash = { type: 'success', text: 'snippet deleted successfully' }
+      res.redirect('..')
+    } else {
+      next(errorResponse(403))
+    }
   } catch (error) {
     req.session.flash = { type: 'error', text: 'could not delete' }
     res.redirect('..')
   }
+}
+
+const isAuthorized = (snippetAuthor, sessionUser) => {
+  return snippetAuthor.localeCompare(sessionUser) == 0
+}
+
+const errorResponse = (errCode) => {
+  const err = new Error()
+  err.statusCode = errCode
+  return err
 }
 
 module.exports = snippetController
