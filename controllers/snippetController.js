@@ -54,9 +54,9 @@ snippetController.edit = async (req, res, next) => {
     const snippetItem = await SnippetItem.findOne({ _id: req.params.id })
 
     if (!snippetItem) {
-        console.log('snippet not found')
-        req.session.flash = { type: 'error', text: 'snippet not found' }
-        res.redirect('./login')
+      console.log('snippet not found')
+      req.session.flash = { type: 'error', text: 'snippet not found' }
+      res.redirect('./login')
     }
 
     if (isAuthorized(snippetItem.author, req.session.user)) {
@@ -114,9 +114,9 @@ snippetController.delete = async (req, res, next) => {
     const snippetItem = await SnippetItem.findOne({ _id: req.params.id })
 
     if (!snippetItem) {
-        console.log('snippet not found')
-        req.session.flash = { type: 'error', text: 'snippet not found' }
-        res.redirect('./login')
+      console.log('snippet not found')
+      req.session.flash = { type: 'error', text: 'snippet not found' }
+      res.redirect('./login')
     }
 
     if (isAuthorized(snippetItem.author, req.session.user)) {

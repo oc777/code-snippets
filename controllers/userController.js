@@ -40,9 +40,9 @@ userController.loginUser = async (req, res, next) => {
     const user = await User.findOne({ email: userEmail })
 
     if (!user) {
-        console.log('user not found')
-        req.session.flash = { type: 'error', text: 'user not found' }
-        res.redirect('./login')
+      console.log('user not found')
+      req.session.flash = { type: 'error', text: 'user not found' }
+      res.redirect('./login')
     }
 
     const isAuthenticated = await user.comparePassword(candidatePassword)
