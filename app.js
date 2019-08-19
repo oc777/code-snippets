@@ -7,9 +7,13 @@ const session = require('express-session')
 const mongoose = require('mongoose')
 const path = require('path')
 const helmet = require('helmet')
+const csrf = require('csurf')
 
 const app = express()
 const port = process.env.PORT || 3000
+
+// Parse application/x-www-form-urlencoded.
+app.use(bodyParser.urlencoded({ extended: true }))
 
 // setup session
 const sessionOptions = {
@@ -50,10 +54,7 @@ app.set('view engine', 'hbs')
 // Serve static files.
 app.use(express.static(path.join(__dirname, 'public')))
 
-// Parse application/x-www-form-urlencoded.
-app.use(bodyParser.urlencoded({ extended: true }))
-
-// set up mongoose
+// Set up mongoose
 mongoose.connect('mongodb://mongo/test')
   .then(() => {
     console.log('Database connected')
@@ -77,6 +78,13 @@ app.use((req, res, next) => {
   next()
 })
 
+// Setup csurf to protect against cross-site req forgery
+app.use(csrf())
+app.use((req, res, next) => {
+  res.locals.csrfToken = req.csrfToken()
+  next()
+})
+
 // routes
 app.use('/', require('./routes/homeRouter'))
 app.use('/snippets', require('./routes/snippetRouter'))
@@ -90,6 +98,15 @@ app.use((req, res, next) => {
 
 // custom error handling
 app.use((err, req, res, next) => {
+  // dev print err
+  console.log(err)
+
+  // csurf
+  if (err.code === 'EBADCSRFTOKEN') {
+    console.log('session has expired or tampered with')
+    return res.status(403).render(path.join(__dirname, 'views', 'errors/403.hbs'))
+  }
+
   // 401 - lacks valid authentication
   if (err.statusCode === 401) {
     console.log('401 err')

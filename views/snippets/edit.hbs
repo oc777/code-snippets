@@ -1,6 +1,7 @@
 <h1>create snippet</h1>
 
 <form method="post" action="/snippets/edit/{{locals.id}}" class="snippet">
+    <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
     <label for="id">ID:</label>
     <input type="text" name="id" value="{{locals.id}}" readonly></input>
     <label for="id">Author:</label>
