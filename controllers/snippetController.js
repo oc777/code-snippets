@@ -52,6 +52,13 @@ snippetController.createSnippet = async (req, res, next) => {
 snippetController.edit = async (req, res, next) => {
   try {
     const snippetItem = await SnippetItem.findOne({ _id: req.params.id })
+
+    if (!snippetItem) {
+        console.log('snippet not found')
+        req.session.flash = { type: 'error', text: 'snippet not found' }
+        res.redirect('./login')
+    }
+
     if (isAuthorized(snippetItem.author, req.session.user)) {
       const locals = {
         id: snippetItem._id,
@@ -92,6 +99,7 @@ snippetController.editSnippet = async (req, res, next) => {
 
       res.redirect('..')
     } else {
+      // not authorized
       next(errorResponse(403))
     }
   } catch (error) {
@@ -104,6 +112,13 @@ snippetController.editSnippet = async (req, res, next) => {
 snippetController.delete = async (req, res, next) => {
   try {
     const snippetItem = await SnippetItem.findOne({ _id: req.params.id })
+
+    if (!snippetItem) {
+        console.log('snippet not found')
+        req.session.flash = { type: 'error', text: 'snippet not found' }
+        res.redirect('./login')
+    }
+
     if (isAuthorized(snippetItem.author, req.session.user)) {
       const locals = {
         id: snippetItem._id,
