@@ -1,4 +1,4 @@
-# oc222ba-examination-2
+# Code Snippets
 
 CRUD application for code snippets.
 
